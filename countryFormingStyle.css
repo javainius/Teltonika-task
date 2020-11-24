@@ -21,4 +21,15 @@
     background-color: rgba(0,0,0,0.5); /* Black background with opacity */
     z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
     cursor: pointer; /* Add a pointer on hover */
-  }
+}
+
+.messageBox{
+    position: absolute;
+    width: 466px;
+    height: 200px;
+    left: 727px;
+    top: 417px;
+    z-index: 3;
+    background-color: white;
+    display: none; /* Hidden by default */
+}

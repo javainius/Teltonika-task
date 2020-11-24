@@ -7,17 +7,34 @@ addCountry = () => {
     let country = getFormedCountry();
     let xhttp = new XMLHttpRequest();
 
-    xhttp.open('POST', 'https://akademija.teltonika.lt/api3/countries', true);
+    xhttp.open('POST', 'https://akademija.teltonika.lt/api3/countries');
     xhttp.setRequestHeader('Content-type', 'application/json')
     xhttp.send(JSON.stringify(country));
     
     xhttp.onreadystatechange = function (){
         if (this.readyState == 4 && this.status == 200)
         {
-            console.log(this.responseText);
+            document.getElementsByClassName("countryAddingBox")[0].style.display = "none";
+
+            showMessage(this);
+
+            refreshTable();
         }
     };
 }
+
+showMessage = (response) => {
+    let messageBox = document.getElementsByClassName("messageBox")[0]
+    messageBox.innerHTML = "";
+
+    messageBox.style.display = "block";
+    let messageText = document.createTextNode(getMessage(response));
+    let message = document.createElement("p");
+    message.appendChild(messageText);
+    messageBox.appendChild(message);
+}
+
+getMessage = (response) => JSON.parse(response.responseText).message;
 
 getFormedCountry = () => {
     let country = {};
@@ -29,26 +46,8 @@ getFormedCountry = () => {
     return country;
 }
 
-// getFormedCountry = () => {
-//     let country = new FormData();
-
-//     country.append('name', document.getElementById("name").value);
-//     country.append('area', document.getElementById("area").value);
-//     country.append('population', document.getElementById("population").value);
-//     country.append('calling_code', document.getElementById("calling_code").value);
-
-//     return country;
-// }
-
-
-
-// getTime = () => {
-//     let h = today.getHours();
-//     let min = today.getMinutes(); 
-//     let sec = today.getSeconds(); 
-//     let dd = String(today.getDate()).padStart(2, '0');
-//     let mm = String(today.getMonth() + 1).padStart(2, '0');
-//     let yyyy = today.getFullYear();
-
-//     return yyyy + "-" + mm + "-" + dd + " " + h + ":"+ min + ":"+ sec;
-// }
+exitForm = () => {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementsByClassName("countryAddingBox")[0].style.display = "none";
+    document.getElementsByClassName("messageBox")[0].style.display = "none" 
+}

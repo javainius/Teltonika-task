@@ -3,7 +3,7 @@
     <head>
         <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
         <link rel="stylesheet" href="table.css">
-        <link rel="stylesheet" href="countryAddingStyle.css">
+        <link rel="stylesheet" href="countryFormingStyle.css">
         <script src="table.js"></script>
         <script src="countryForming.js"></script>
         <title>Salys</title>
@@ -55,6 +55,10 @@
             <input type="text" id="calling_code" name="lname" value="Doe"><br><br>
             <button onClick=addCountry()>SAUGOTI</button>         
         </div>
-        <div id="overlay"></div>
+        <div id="overlay" onclick=exitForm()></div>
+        <div class="messageBox">
+            <h3>Message:</h3>
+        </div>
     </body>
+    <script src="executeAfterLoading.js"></script>
 </html>
