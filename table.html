@@ -17,7 +17,7 @@
             </div>
         </div>
         <h1>Šalys</h1>
-        <div class="addingSymbol" onclick=formCountry()>
+        <div class="addingSymbol" onclick=openCountryForm()>
             <div class="plus">
                 <span class="vertical"></span>
                 <span class="horizontal"></span>
@@ -46,14 +46,14 @@
         </div>
         <div class="countryAddingBox">
             <label for="name">Pavadinimas</label><br>
-            <input type="text" id="name" name="fname" value="John"><br>
+            <input type="text" id="name" name="fname" value="salis"><br>
             <label for="area">Užimamas plotas</label><br>
-            <input type="text" id="area" name="lname" value="Doe"><br><br>
+            <input type="text" id="area" name="lname" value="111"><br><br>
             <label for="population">Gyventojų skaičius</label><br>
-            <input type="text" id="population" name="lname" value="Doe"><br><br>
+            <input type="text" id="population" name="lname" value="222"><br><br>
             <label for="calling_code">Šalies Tel. kodas</label><br>
-            <input type="text" id="calling_code" name="lname" value="Doe"><br><br>
-            <button onClick=addCountry()>SAUGOTI</button>         
+            <input type="text" id="calling_code" name="lname" value="333"><br><br>
+            <button onClick=addNewCountry() id="sendingTrigger">SAUGOTI</button>         
         </div>
         <div id="overlay" onclick=exitForm()></div>
         <div class="messageBox">

@@ -1,29 +1,33 @@
-formCountry = () =>{
+openCountryForm = () =>{
     document.getElementById("overlay").style.display = "block";
     document.getElementsByClassName("countryAddingBox")[0].style.display = "block";
 }
 
-addCountry = () => {
+addNewCountry = () => {
     let country = getFormedCountry();
     let xhttp = new XMLHttpRequest();
-
     xhttp.open('POST', 'https://akademija.teltonika.lt/api3/countries');
+    
+    sendCountry(xhttp, country);
+}
+
+sendCountry = (xhttp, country) => {
     xhttp.setRequestHeader('Content-type', 'application/json')
     xhttp.send(JSON.stringify(country));
     
     xhttp.onreadystatechange = function (){
         if (this.readyState == 4 && this.status == 200)
         {
-            document.getElementsByClassName("countryAddingBox")[0].style.display = "none";
-
             showMessage(this);
-
             refreshTable();
+            changeButtonToCreate();
         }
     };
 }
 
 showMessage = (response) => {
+    document.getElementsByClassName("countryAddingBox")[0].style.display = "none";
+
     let messageBox = document.getElementsByClassName("messageBox")[0]
     messageBox.innerHTML = "";
 
@@ -50,4 +54,19 @@ exitForm = () => {
     document.getElementById("overlay").style.display = "none";
     document.getElementsByClassName("countryAddingBox")[0].style.display = "none";
     document.getElementsByClassName("messageBox")[0].style.display = "none" 
+}
+
+fillCountryForm = (country) => {
+    document.getElementById("name").value = country.name;
+    document.getElementById("area").value = country.area;
+    document.getElementById("population").value = country.population;
+    document.getElementById("calling_code").value = country.calling_code;
+}
+
+changeButtonToUpdate = (id) => {
+    document.getElementById("sendingTrigger").onclick = () => sendUpdatedCountryItem(id);
+}
+
+changeButtonToCreate = () => {
+    document.getElementById("sendingTrigger").onclick = () => addNewCountry();
 }

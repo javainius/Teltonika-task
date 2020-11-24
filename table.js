@@ -43,30 +43,37 @@ appendCountry = (country) => {
     newRow.appendChild(getTableData(country.area));
     newRow.appendChild(getTableData(country.population));
     newRow.appendChild(getTableData(country.calling_code));
-    deleteAction = getTableData("DELETE")
-    deleteAction.id = country.id;
-
-    deleteAction.onclick = () => deleteItem("countries", country.id);
-    newRow.appendChild(deleteAction);
+    newRow.appendChild(getTableActions("countries", country));
     
     newRow.id = country.id;
     table.appendChild(newRow);
 }
 
-getTableActions = (itemType, country) =>{
+getTableActions = (itemType, item) =>{
     let tableData = document.createElement("td");
 
+    tableData.appendChild(getDeleteAction(itemType, item));
+    tableData.appendChild(getUpdateAction(itemType, item));
+
+    return tableData;
+}
+
+getDeleteAction = (itemType, item) => {
     let textNode = document.createTextNode("DELETE");
     let deleteAction = document.createElement("div");
     deleteAction.appendChild(textNode);
-    deleteAction.onclick = () => deleteItem(itemType, country.id);
+    deleteAction.onclick = () => deleteItem(itemType, item.id);
 
-    textNode = document.createTextNode("UPDATE");
+    return deleteAction;
+}
+
+getUpdateAction = (itemType, item) => {
+    let textNode = document.createTextNode("UPDATE");
     let updateAction = document.createElement("div");
     updateAction.appendChild(textNode);
-    updateAction.onclick = () => updateCountryItem(country);
+    updateAction.onclick = () => setCountryForm(item);
 
-    tableData.appendChild(textNode);
+    return updateAction;
 }
 
 getTableData = (data) =>{
@@ -90,16 +97,16 @@ deleteItem = (itemType, id) => {
     }
 }
 
-updateCountryItem = (country) => {
+sendUpdatedCountryItem = (id) => {
+    let country = getFormedCountry();
     let xhttp = new XMLHttpRequest();
-    xhttp.open('PUT', `https://akademija.teltonika.lt/api3/countries/${country.id}`);
-    xhttp.send();
-
-    xhttp.onreadystatechange = function (){
-        if (this.readyState == 4 && this.status == 200)
-        {
-            refreshTable();
-        }
-    }
+    xhttp.open('PUT', `https://akademija.teltonika.lt/api3/countries/${id}`);
+    
+    sendCountry(xhttp, country);
 }
 
+setCountryForm = (country) => {
+    openCountryForm();
+    fillCountryForm(country);
+    changeButtonToUpdate(country.id);
+}
