@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
+        <link rel="stylesheet" href="table.css">
+        <link rel="stylesheet" href="countryAddingStyle.css">
+        <script src="table.js"></script>
+        <script src="countryForming.js"></script>
+        <title>Salys</title>
+    </head>
+    <body>
+        <div class="top">
+            <div class="logoDiv">
+                <div class="logo">
+                    <img src="logo.png" alt="teltonika">
+                </div>
+            </div>
+        </div>
+        <h1>Šalys</h1>
+        <div class="addingSymbol" onclick=formCountry()>
+            <div class="plus">
+                <span class="vertical"></span>
+                <span class="horizontal"></span>
+            </div>
+        </div>
+        <i class="fa fa-user icon"></i> 
+        <input type="search" class="searchBar"></input>
+        <div class="filter">
+            <button class="dropbtn">data filter <div class="arrow"></div></button>
+            <div class="dropdown-content">
+                <a href="#">A - Z</a>
+                <a href="#">Z - A</a>
+                <a href="#">By date</a>
+            </div>
+        </div>
+        <div class="table-box">
+            <table>
+                <tr>
+                    <th>pavadinimas</th>
+                    <th>užimamas plotas</th>
+                    <th>gyventojų skaičius</th>
+                    <th>šalies tel. kodas</th>
+                    <th>veiksmai</th>
+                </tr>
+            </table>
+        </div>
+        <div class="countryAddingBox">
+            <label for="name">Pavadinimas</label><br>
+            <input type="text" id="name" name="fname" value="John"><br>
+            <label for="area">Užimamas plotas</label><br>
+            <input type="text" id="area" name="lname" value="Doe"><br><br>
+            <label for="population">Gyventojų skaičius</label><br>
+            <input type="text" id="population" name="lname" value="Doe"><br><br>
+            <label for="calling_code">Šalies Tel. kodas</label><br>
+            <input type="text" id="calling_code" name="lname" value="Doe"><br><br>
+            <button onClick=addCountry()>SAUGOTI</button>         
+        </div>
+        <div id="overlay"></div>
+    </body>
+</html>

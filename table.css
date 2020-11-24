@@ -1,0 +1,246 @@
+/* TOP */
+body{
+    font-family: Oswald;
+}
+
+.top{
+    position: absolute;
+    width: 1920px;
+    height: 71px;
+    left: 0px;
+    top: 0px;
+
+    background: #0054A6;
+}
+
+.logoDiv{
+    position: absolute;
+    width: 142.77px;
+    height: 28px;
+    left: 367px;
+    top: 20px;
+}
+
+.logo{
+    height: 28px;
+    width: 142.7718048095703px;
+    left: 367px;
+    top: 20px;
+    border-radius: 0px;    
+}
+
+img{
+    height: 32px;
+    width: 142.7718048095703px;
+    left: 367px;
+    top: 20px;
+    border-radius: 0px;
+    
+    background: #FFFFFF;
+}
+
+h1{
+    font-size: 64px;
+    line-height: 95px;
+    letter-spacing: 0.016em;
+    text-align: left;
+
+    position: absolute;
+    width: 166px;
+    height: 95px;
+    left: 376px;
+    top: 116px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 64px;
+    line-height: 95px;
+    /* identical to box height */
+
+    letter-spacing: 0.016em;
+    text-transform: uppercase;
+
+    color: #5C5C5C;
+    margin: 0;
+}
+
+.vertical{
+    /* Line */
+
+    position: absolute;
+    width: 18.45px;
+    height: 0px;
+
+    border: 1px solid #969696;
+    transform: rotate(90deg);
+}
+
+.horizontal{
+    /* Line */
+    position: absolute;
+    width: 18.45px;
+    height: 0px;
+
+    border: 1px solid #969696;
+}
+
+.plus{
+    position: relative;
+    /* Group 5.1 */
+    width: 18.45px;
+    height: 18.45px;
+    margin-top: 20px;
+    margin-left: 11.78px;
+}
+
+.addingSymbol{
+    position: absolute;
+    height: 44px;
+    width: 44px;
+    left: 538px;
+    top: 145px;
+    border-radius: 50%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.addingSymbol:hover {
+    background-color: rgb(218, 216, 216);
+}
+.searchBar{
+    position: absolute;
+    width: 1000px;
+    height: 49px;
+    left: 376px;
+    top: 240px;
+    border: 0;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.searchBar:focus{
+    outline: none;
+}
+
+.filter{
+    position: absolute;
+    width: 161px;
+    height: 49px;
+    left: 1400px;
+    top: 240px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    text-align: center;
+}
+
+.dropbtn {
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    border: none;
+    font-family: Oswald;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 27px;
+    letter-spacing: 0.016em;
+    text-transform: uppercase;
+
+    color: #969696;
+}
+
+.dropbtn:focus{
+    outline: none;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.dropdown-content a {
+    color: #969696;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: rgb(184, 184, 184);
+    color: white;
+    border-radius: 5px;
+}
+
+.filter:hover .dropdown-content {
+    display: block;
+    border-radius: 5px;
+}
+
+.filter:hover .dropbtn {
+    background-color: #ebebeb;
+    border-radius: 5px;
+}
+
+.table-box{
+    position: absolute;
+    width: 1185px;
+    height: 588px;
+    left: 376px;
+    top: 315px;
+
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.table-box table{
+    margin: auto;
+    margin-top: 12px;
+    width: 1119px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.table-box th{
+    border: 1px solid black;
+    padding-top: 15px;
+    font-family: Oswald;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 27px;
+    /* identical to box height */
+
+    letter-spacing: 0.016em;
+    text-transform: uppercase;
+    text-align: left;
+}
+
+.table-box td{
+    border: 1px solid black;
+}
+
+.table-box tr th:first-child,
+.table-box tr td:first-child {
+  width: 227px;
+}
+
+.table-box tr th:nth-child(2),
+.table-box tr td:nth-child(2) {
+  width: 262px;
+}
+
+.table-box tr th:nth-child(3),
+.table-box tr td:nth-child(3) {
+  width: 275px;
+}
+
+.table-box tr th:nth-child(4),
+.table-box tr td:nth-child(4) {
+  width: 215px;
+}
