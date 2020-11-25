@@ -16,14 +16,13 @@
                 </div>
             </div>
         </div>
-        <h1>Šalys</h1>
+        <h1 id="title"></h1>
         <div class="addingSymbol" onclick=openCountryForm()>
             <div class="plus">
                 <span class="vertical"></span>
                 <span class="horizontal"></span>
             </div>
         </div>
-        <i class="fa fa-user icon"></i> 
         <input type="search" class="searchBar"></input>
         <div class="filter">
             <button class="dropbtn">data filter <div class="arrow"></div></button>
@@ -39,7 +38,7 @@
                     <th>pavadinimas</th>
                     <th>užimamas plotas</th>
                     <th>gyventojų skaičius</th>
-                    <th>šalies tel. kodas</th>
+                    <th>pašto kodas</th>
                     <th>veiksmai</th>
                 </tr>
             </table>
@@ -53,21 +52,21 @@
             <li onclick=changePage(5)>5</li>
             <li onclick=nextPage()>></li>
         </ul>
-        <div class="countryAddingBox">
+        <div class="cityAddingBox">
             <label for="name">Pavadinimas</label><br>
             <input type="text" id="name" name="fname" value="salis"><br>
             <label for="area">Užimamas plotas</label><br>
             <input type="text" id="area" name="lname" value="111"><br><br>
             <label for="population">Gyventojų skaičius</label><br>
             <input type="text" id="population" name="lname" value="222"><br><br>
-            <label for="calling_code">Šalies Tel. kodas</label><br>
-            <input type="text" id="calling_code" name="lname" value="333"><br><br>
-            <button onClick=addNewCountry() id="sendingTrigger">SAUGOTI</button>         
+            <label for="postcode">Pašto kodas</label><br>
+            <input type="text" id="postcode" name="lname" value="333"><br><br>
+            <button onClick=addNewCity() id="sendingTrigger">SAUGOTI</button>         
         </div>
         <div id="overlay" onclick=exitForm()></div>
         <div class="messageBox">
             <h3>Message:</h3>
         </div>
     </body>
-    <script src="executeAfterLoading.js"></script>
+    <script src="execute.js"></script>
 </html>

@@ -1,15 +1,35 @@
-var currentCountryPage = 1;
+var currentPage = 1;
+const baseURL = "https://akademija.teltonika.lt/api3/";
+
+changeTitle = (title) => {
+    let text = document.getElementById("title").innerText;
+    document.getElementById("title").innerText = title;
+}
+
+fillCitiesTable = (id) => {
+    let xhttp = new XMLHttpRequest();
+    xhttp.open('GET', `https://akademija.teltonika.lt/api3/cities/${id}`);
+    xhttp.send();
+
+    xhttp.onreadystatechange = function (){
+        if (this.readyState == 4 && this.status == 200){
+            let cities = getCities(this);
+
+            cities.forEach(city => {
+                appendCity(city);
+            });
+        }
+    };
+}
 
 fillCountryTable = () => {
     let xhttp = new XMLHttpRequest();
-    xhttp.open('GET', `https://akademija.teltonika.lt/api3/countries?page=${currentCountryPage}`);
+    xhttp.open('GET', `https://akademija.teltonika.lt/api3/countries?page=${currentPage}`);
     xhttp.send();
-    let areCountriesAdded = false;
 
     xhttp.onreadystatechange = function (){
-        if (this.readyState == 4 && this.status == 200 && !areCountriesAdded){
+        if (this.readyState == 4 && this.status == 200){
             let countries = getCountries(this);
-            areCountriesAdded = true;
 
             countries.forEach(country => {
                 appendCountry(country);
@@ -41,13 +61,12 @@ appendCountry = (country) => {
     let table = document.getElementsByTagName("table")[0];
     let newRow = document.createElement("tr");
 
-    newRow.appendChild(getTableData(country.name));
+    newRow.appendChild(getAnchorsToCities(country));
     newRow.appendChild(getTableData(country.area));
     newRow.appendChild(getTableData(country.population));
     newRow.appendChild(getTableData(country.calling_code));
     newRow.appendChild(getTableActions("countries", country));
-    
-    newRow.id = country.id;
+
     table.appendChild(newRow);
 }
 
@@ -78,7 +97,19 @@ getUpdateAction = (itemType, item) => {
     return updateAction;
 }
 
-getTableData = (data) =>{
+getAnchorsToCities = (country) => {
+    let tableData = document.createElement("td");
+    let textNode = document.createTextNode(country.name);
+    let anchorToCities = document.createElement("a");
+
+    anchorToCities.appendChild(textNode);
+    anchorToCities.href = `cityTable.html?countryId=${country.id}&countryName=${country.name}`
+    tableData.appendChild(anchorToCities);
+
+    return tableData;
+}
+
+getTableData = (data) => {
     let tableData = document.createElement("td");
     let textNode = document.createTextNode(data);
     tableData.appendChild(textNode);
@@ -114,22 +145,48 @@ setCountryForm = (country) => {
 }
 
 prevPage = () => {
-    if(currentCountryPage > 1){
-        currentCountryPage--;
+    if(currentPage > 1){
+        currentPage--;
         refreshTable();
     }
 }
 
 nextPage = () => {
-    if(currentCountryPage < 5){
-        currentCountryPage++;
+    if(currentPage < 5){
+        currentPage++;
         refreshTable();
     }
 }
 
 changePage = (pageNumber) => {
-    if(currentCountryPage != pageNumber){
-        currentCountryPage = pageNumber;
+    if(currentPage != pageNumber){
+        currentPage = pageNumber;
         refreshTable();
+    }
+}
+
+getCities = (response) => JSON.parse(response.responseText);
+
+appendCity = (city) => {
+    let table = document.getElementsByTagName("table")[0];
+    let newRow = document.createElement("tr");
+
+    newRow.appendChild(getTableData(city.name));
+    newRow.appendChild(getTableData(city.area));
+    newRow.appendChild(getTableData(city.population));
+    newRow.appendChild(getTableData(city.postcode));
+    newRow.appendChild(getTableActions("cities", city));
+
+    table.appendChild(newRow);
+}
+
+fillThePage = () => {
+    if(window.location.search.length > 0){
+        let params = new URLSearchParams(window.location.search);
+        let id = params.get('countryId');
+        let countryName = params.get('countryName');
+    
+        fillCitiesTable(id);
+        changeTitle(countryName);
     }
 }

@@ -70,3 +70,4 @@ changeButtonToUpdate = (id) => {
 changeButtonToCreate = () => {
     document.getElementById("sendingTrigger").onclick = () => addNewCountry();
 }
+
