@@ -1,6 +1,8 @@
+var currentCountryPage = 1;
+
 fillCountryTable = () => {
     let xhttp = new XMLHttpRequest();
-    xhttp.open('GET', 'https://akademija.teltonika.lt/api3/countries?page=1');
+    xhttp.open('GET', `https://akademija.teltonika.lt/api3/countries?page=${currentCountryPage}`);
     xhttp.send();
     let areCountriesAdded = false;
 
@@ -109,4 +111,25 @@ setCountryForm = (country) => {
     openCountryForm();
     fillCountryForm(country);
     changeButtonToUpdate(country.id);
+}
+
+prevPage = () => {
+    if(currentCountryPage > 1){
+        currentCountryPage--;
+        refreshTable();
+    }
+}
+
+nextPage = () => {
+    if(currentCountryPage < 5){
+        currentCountryPage++;
+        refreshTable();
+    }
+}
+
+changePage = (pageNumber) => {
+    if(currentCountryPage != pageNumber){
+        currentCountryPage = pageNumber;
+        refreshTable();
+    }
 }

@@ -244,3 +244,15 @@ h1{
 .table-box tr td:nth-child(4) {
   width: 215px;
 }
+
+.navigation{
+    position: absolute;
+    width: 80px;
+    height: 27px;
+    left: 928px;
+    top: 939px;
+}
+
+.navigation li{
+    display: inline-block;
+}
