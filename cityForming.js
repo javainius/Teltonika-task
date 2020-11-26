@@ -6,7 +6,7 @@ openCityForm = () =>{
 addNewCity = () => {
     let city = getFormedCity();
     let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', `https://akademija.teltonika.lt/api3/cities`);
+    xhttp.open('POST', getFormedURL(false, false));
     
     sendCity(xhttp, city);
 }
@@ -46,7 +46,7 @@ getFormedCity = () => {
     city.area = document.getElementById("area").value;
     city.population = document.getElementById("population").value;
     city.postcode = document.getElementById("postcode").value;
-    city.country_id = currentCountryId;
+    city.country_id = countryId;
 
     return city;
 }

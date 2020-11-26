@@ -1,6 +1,8 @@
 fillCountryTable();
 
 var searchInput = document.getElementById("searchBar");
+searchInput.value = searchText;
+
 
 // Execute a function when the user releases a key on the keyboard
 searchInput.addEventListener("keyup", function(event) {
@@ -16,7 +18,7 @@ searchInput.addEventListener("keyup", function(event) {
         let locationUrl = "countryTable.html"
 
         if(params.length > 0){
-            locationUrl = locationUrl + params;
+            locationUrl = locationUrl + removeParam("text" , params);
         }
         else {
             locationUrl = locationUrl + "?";
@@ -27,3 +29,23 @@ searchInput.addEventListener("keyup", function(event) {
         
   }
 });
+
+function removeParam(key, sourceURL) {
+    var rtn = sourceURL.split("?")[0],
+        param,
+        params_arr = [],
+        queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+    if (queryString !== "") {
+        params_arr = queryString.split("&");
+        for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+            param = params_arr[i].split("=")[0];
+            if (param === key) {
+                params_arr.splice(i, 1);
+            }
+        }
+        rtn = rtn + "?" + params_arr.join("&");
+    }
+    return rtn;
+}
+
+disableDateFilter();

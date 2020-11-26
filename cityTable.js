@@ -1,40 +1,64 @@
 var currentPage = 1;
-var currentCountryId;
-const baseURL = "https://akademija.teltonika.lt/api3/";
+var order = null;
+var filterText = null;
+var dateOfCreation = new URLSearchParams(window.location.search).get("date");
+var searchText = new URLSearchParams(window.location.search).get("text");
+var countryId = new URLSearchParams(window.location.search).get("countryId");
+var countryName = new URLSearchParams(window.location.search).get("countryName");
 
-changeTitle = (title) => {
-    let text = document.getElementById("title").innerText;
-    document.getElementById("title").innerText = title;
+getFormedURL = (isParamsNeeded, isCountryIdNeeded) => {
+    let url = new URL("https://akademija.teltonika.lt/api3/cities");
+
+    if(isCountryIdNeeded ){
+        url.href += `/${countryId}`;
+    }
+
+    if(!isParamsNeeded ){
+        return url;
+    }
+    
+    url.searchParams.append("page", currentPage);
+
+    if(order != null){
+        url.searchParams.append("order", order);
+    }
+
+    if(searchText != null){
+        url.searchParams.append("text", searchText);
+    }
+
+    if(dateOfCreation != null){
+        url.searchParams.append("date", dateOfCreation);
+    }
+
+    return url;
 }
 
-fillCitiesTable = (id) => {
-    let xhttp = new XMLHttpRequest();
-    xhttp.open('GET', `https://akademija.teltonika.lt/api3/cities/${id}`);
-    xhttp.send();
-
-    xhttp.onreadystatechange = function (){
-        if (this.readyState == 4 && this.status == 200){
-            let cities = getCities(this);
-
-            cities.forEach(city => {
-                appendCity(city);
-            });
-        }
-    };
-}
+changeTitle = (title) => document.getElementById("title").innerHTML = title;
 
 fillCityTable = () => {
     let xhttp = new XMLHttpRequest();
-    xhttp.open('GET', `https://akademija.teltonika.lt/api3/cities/${currentCountryId}?page=${currentPage}`);
+
+    xhttp.open('GET', getFormedURL(true, true));
     xhttp.send();
 
     xhttp.onreadystatechange = function (){
         if (this.readyState == 4 && this.status == 200){
             let cities = getCities(this);
+            let dates = [];
 
             cities.forEach(city => {
                 appendCity(city);
+                dates.push(city.created_at.split(" ")[0]);
             });
+
+            if(!dateOfCreation){
+                dates = [...new Set(dates)];
+
+                dates.forEach( date => {
+                    appendDate(date);
+                })
+            }
         }
     };
 }
@@ -42,54 +66,71 @@ fillCityTable = () => {
 cleanAllCities = () => {
     let table = document.getElementsByTagName("table")[0];
 
-    table.innerHTML = "<tr>" + 
-                        "<th>pavadinimas</th>" +
-                        "<th>užimamas plotas</th>" +
-                        "<th>gyventojų skaičius</th>" +
-                        "<th>pašto kodas</th>" + 
-                        "<th>veiksmai</th>" +
-                      "</tr>";
+    while (table.childNodes.length > 2) {
+        table.removeChild(table.lastChild);
+    }
 }
 
 refreshTable = () => { 
     cleanAllCities();
     fillCityTable();
+    cleanDates();
+}
+
+cleanDates = () => {
+    let filterContent = document.getElementsByClassName("dropdown-content")[0];
+    filterContent.innerHTML = "";
 }
 
 getCities = (response) => JSON.parse(response.responseText);
 
-appendCity = (country) => {
+appendCity = (city) => {
     let table = document.getElementsByTagName("table")[0];
     let newRow = document.createElement("tr");
 
-    newRow.appendChild(getTableData(country.name));
-    newRow.appendChild(getTableData(country.area));
-    newRow.appendChild(getTableData(country.population));
-    newRow.appendChild(getTableData(country.calling_code));
-    newRow.appendChild(getTableActions("cities", country));
+    newRow.appendChild(getTableData(city.name));
+    newRow.appendChild(getTableData(city.area));
+    newRow.appendChild(getTableData(city.population));
+    newRow.appendChild(getTableData(city.calling_code));
+    newRow.appendChild(getTableActions(city));
 
     table.appendChild(newRow);
 }
 
-getTableActions = (itemType, item) =>{
+appendDate = (date) => {
+    let filterContent = document.getElementsByClassName("dropdown-content")[0];
+    let dateAnchor = document.createElement("a");
+    let textNode = document.createTextNode(date);
+    dateAnchor.appendChild(textNode);
+
+    dateAnchor.href = `?date=${date}&countryId=${countryId}&countryName=${countryName}`
+
+    if(searchText){
+        dateAnchor.href += `&text=${searchText}` 
+    }
+
+    filterContent.appendChild(dateAnchor);
+}
+
+getTableActions = (item) =>{
     let tableData = document.createElement("td");
 
-    tableData.appendChild(getDeleteAction(itemType, item));
-    tableData.appendChild(getUpdateAction(itemType, item));
+    tableData.appendChild(getDeleteAction(item));
+    tableData.appendChild(getUpdateAction(item));
 
     return tableData;
 }
 
-getDeleteAction = (itemType, item) => {
+getDeleteAction = (item) => {
     let textNode = document.createTextNode("DELETE");
     let deleteAction = document.createElement("div");
     deleteAction.appendChild(textNode);
-    deleteAction.onclick = () => deleteItem(itemType, item.id);
+    deleteAction.onclick = () => deleteItem(item.id);
 
     return deleteAction;
 }
 
-getUpdateAction = (itemType, item) => {
+getUpdateAction = (item) => {
     let textNode = document.createTextNode("UPDATE");
     let updateAction = document.createElement("div");
     updateAction.appendChild(textNode);
@@ -106,9 +147,9 @@ getTableData = (data) => {
     return tableData;
 } 
 
-deleteItem = (itemType, id) => {
+deleteItem = (id) => {
     let xhttp = new XMLHttpRequest();
-    xhttp.open('DELETE', `https://akademija.teltonika.lt/api3/${itemType}/${id}`);
+    xhttp.open('DELETE', `${getFormedURL(false, false)}/${id}`);
     xhttp.send();
 
     xhttp.onreadystatechange = function (){
@@ -122,7 +163,7 @@ deleteItem = (itemType, id) => {
 sendUpdatedCityItem = (id) => {
     let city = getFormedCity();
     let xhttp = new XMLHttpRequest();
-    xhttp.open('PUT', `https://akademija.teltonika.lt/api3/cities/${id}`);
+    xhttp.open('PUT', getFormedURL(false, false) + `/${id}`);
     
     sendCity(xhttp, city);
 }
@@ -154,8 +195,6 @@ changePage = (pageNumber) => {
     }
 }
 
-getCities = (response) => JSON.parse(response.responseText);
-
 appendCity = (city) => {
     let table = document.getElementsByTagName("table")[0];
     let newRow = document.createElement("tr");
@@ -164,17 +203,32 @@ appendCity = (city) => {
     newRow.appendChild(getTableData(city.area));
     newRow.appendChild(getTableData(city.population));
     newRow.appendChild(getTableData(city.postcode));
-    newRow.appendChild(getTableActions("cities", city));
+    newRow.appendChild(getTableActions(city));
 
     table.appendChild(newRow);
 }
 
-fillThePage = () => {
-    let params = new URLSearchParams(window.location.search);
-    let id = params.get('countryId');
-    let countryName = params.get('countryName');
-    currentCountryId = id;
+sortAsc = () => {
+    if(order == null || order == "desc")
+        order = "asc";
+    else
+        order = null;
 
-    fillCitiesTable(id);
-    changeTitle(countryName);
+    refreshTable();
+} 
+
+sortDesc = () => {
+    if(order == null || order == "asc")
+        order = "desc";
+    else
+        order = null;
+
+    refreshTable();
+}
+
+disableDateFilter = () => {
+    if (dateOfCreation){
+        dropBtn = document.getElementsByClassName("dropbtn")[0];
+        dropBtn.innerHTML = dateOfCreation;
+    }
 }

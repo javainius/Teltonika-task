@@ -1,15 +1,10 @@
 var currentPage = 1;
 var order = null;
-var searchText = null;
-var dateOfCreation = null;
-var filterText = null;
-var date = new URLSearchParams(window.location.search).get("date");
-var search = new URLSearchParams(window.location.search).get("text");
+var dateOfCreation = new URLSearchParams(window.location.search).get("date");
+var searchText = new URLSearchParams(window.location.search).get("text");
 
 
 getFormedURL = (isParamsNeeded) => {
-
-
     let url = new URL("https://akademija.teltonika.lt/api3/countries");
 
     if(!isParamsNeeded){
@@ -22,23 +17,16 @@ getFormedURL = (isParamsNeeded) => {
         url.searchParams.append("order", order);
     }
 
+    if(dateOfCreation != null){
+        url.searchParams.append("date", dateOfCreation);
+    }
+
     if(searchText != null){
         url.searchParams.append("text", searchText);
     }
 
-    if(date != null){
-        url.searchParams.append("date", date);
-    }
-
-    if(search != null){
-        url.searchParams.append("text", search);
-    }
-
     return url;
 }
-
-changeTitle = (title) => document.getElementById("title").innerText = title;
-
 
 fillCountryTable = () => {
     let xhttp = new XMLHttpRequest();
@@ -56,11 +44,14 @@ fillCountryTable = () => {
                 dates.push(country.created_at.split(" ")[0]);
             });
 
-            dates = [...new Set(dates)];
+            if(!dateOfCreation){
+                dates = [...new Set(dates)];
 
-            dates.forEach( date => {
-                appendDate(date);
-            })
+                dates.forEach( date => {
+                    appendDate(date);
+                })
+            }
+            
         }
     };
 }
@@ -76,16 +67,12 @@ cleanAllCountries = () => {
 refreshTable = () => { 
     cleanAllCountries();
     fillCountryTable();
-    refreshDates();
+    cleanDates();
 }
 
-refreshDates = () => {
+cleanDates = () => {
     let filterContent = document.getElementsByClassName("dropdown-content")[0];
-
     filterContent.innerHTML = "";
-    // while (filterContent.childNodes.length > 2) {
-    //     table.removeChild(table.lastChild);
-    // }
 }
 
 getCountries = (response) => JSON.parse(response.responseText).countires;
@@ -98,7 +85,7 @@ appendCountry = (country) => {
     newRow.appendChild(getTableData(country.area));
     newRow.appendChild(getTableData(country.population));
     newRow.appendChild(getTableData(country.calling_code));
-    newRow.appendChild(getTableActions("countries", country));
+    newRow.appendChild(getTableActions(country));
 
     table.appendChild(newRow);
 }
@@ -108,25 +95,31 @@ appendDate = (date) => {
     let dateAnchor = document.createElement("a");
     let textNode = document.createTextNode(date);
     dateAnchor.appendChild(textNode);
-    dateAnchor.href = `?date=${date}`
+
+    if(searchText){
+        dateAnchor.href = `?text=${searchText}&date=${date}` 
+    }
+    else{
+        dateAnchor.href = `?date=${date}`
+    }
 
     filterContent.appendChild(dateAnchor);
 }
 
-getTableActions = (itemType, item) =>{
+getTableActions = (item) =>{
     let tableData = document.createElement("td");
 
-    tableData.appendChild(getDeleteAction(itemType, item));
+    tableData.appendChild(getDeleteAction(item));
     tableData.appendChild(getUpdateAction(item));
 
     return tableData;
 }
 
-getDeleteAction = (itemType, item) => {
+getDeleteAction = (item) => {
     let textNode = document.createTextNode("DELETE");
     let deleteAction = document.createElement("div");
     deleteAction.appendChild(textNode);
-    deleteAction.onclick = () => deleteItem(itemType, item.id);
+    deleteAction.onclick = () => deleteItem(item.id);
 
     return deleteAction;
 }
@@ -160,7 +153,7 @@ getTableData = (data) => {
     return tableData;
 } 
 
-deleteItem = (itemType, id) => {
+deleteItem = (id) => {
     let xhttp = new XMLHttpRequest();
     xhttp.open('DELETE', `${getFormedURL(false)}/${id}`);
     xhttp.send();
@@ -208,21 +201,6 @@ changePage = (pageNumber) => {
     }
 }
 
-getCities = (response) => JSON.parse(response.responseText);
-
-appendCity = (city) => {
-    let table = document.getElementsByTagName("table")[0];
-    let newRow = document.createElement("tr");
-
-    newRow.appendChild(getTableData(city.name));
-    newRow.appendChild(getTableData(city.area));
-    newRow.appendChild(getTableData(city.population));
-    newRow.appendChild(getTableData(city.postcode));
-    newRow.appendChild(getTableActions("cities", city));
-
-    table.appendChild(newRow);
-}
-
 sortAsc = () => {
     if(order == null || order == "desc")
         order = "asc";
@@ -230,7 +208,6 @@ sortAsc = () => {
         order = null;
 
     refreshTable();
-    //countries?page=1&order=asc&text=Lietuva
 } 
 
 sortDesc = () => {
@@ -240,4 +217,11 @@ sortDesc = () => {
         order = null;
 
     refreshTable();
+}
+
+disableDateFilter = () => {
+    if (dateOfCreation){
+        dropBtn = document.getElementsByClassName("dropbtn")[0];
+        dropBtn.innerHTML = dateOfCreation;
+    }
 }

@@ -23,19 +23,15 @@
                 <span class="horizontal"></span>
             </div>
         </div>
-        <input type="search" class="searchBar"></input>
+        <input type="search" id="searchBar"></input>
         <div class="filter">
             <button class="dropbtn">data filter <div class="arrow"></div></button>
-            <div class="dropdown-content">
-                <a href="#">A - Z</a>
-                <a href="#">Z - A</a>
-                <a href="#">By date</a>
-            </div>
+            <div class="dropdown-content"></div>
         </div>
         <div class="table-box">
             <table>
                 <tr>
-                    <th>pavadinimas</th>
+                    <th>pavadinimas <span onclick="sortAsc()">SortAsc</span> | <span onclick="sortDesc()">SortDesc</span></th>
                     <th>užimamas plotas</th>
                     <th>gyventojų skaičius</th>
                     <th>pašto kodas</th>
