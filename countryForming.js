@@ -6,7 +6,7 @@ openCountryForm = () =>{
 addNewCountry = () => {
     let country = getFormedCountry();
     let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', 'https://akademija.teltonika.lt/api3/countries');
+    xhttp.open('POST', getFormedURL(false));
     
     sendCountry(xhttp, country);
 }

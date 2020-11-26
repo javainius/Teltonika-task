@@ -6,7 +6,7 @@ openCityForm = () =>{
 addNewCity = () => {
     let city = getFormedCity();
     let xhttp = new XMLHttpRequest();
-    xhttp.open('POST', `https://akademija.teltonika.lt/api3/cities/`);
+    xhttp.open('POST', `https://akademija.teltonika.lt/api3/cities`);
     
     sendCity(xhttp, city);
 }

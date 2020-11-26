@@ -105,7 +105,7 @@ h1{
 .addingSymbol:hover {
     background-color: rgb(218, 216, 216);
 }
-.searchBar{
+#searchBar{
     position: absolute;
     width: 1000px;
     height: 49px;
@@ -117,7 +117,7 @@ h1{
     border-radius: 5px;
 }
 
-.searchBar:focus{
+#searchBar:focus{
     outline: none;
 }
 

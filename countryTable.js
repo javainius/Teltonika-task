@@ -1,39 +1,66 @@
 var currentPage = 1;
-const baseURL = "https://akademija.teltonika.lt/api3/";
+var order = null;
+var searchText = null;
+var dateOfCreation = null;
+var filterText = null;
+var date = new URLSearchParams(window.location.search).get("date");
+var search = new URLSearchParams(window.location.search).get("text");
 
-changeTitle = (title) => {
-    let text = document.getElementById("title").innerText;
-    document.getElementById("title").innerText = title;
+
+getFormedURL = (isParamsNeeded) => {
+
+
+    let url = new URL("https://akademija.teltonika.lt/api3/countries");
+
+    if(!isParamsNeeded){
+        return url;
+    }
+    
+    url.searchParams.append("page", currentPage);
+
+    if(order != null){
+        url.searchParams.append("order", order);
+    }
+
+    if(searchText != null){
+        url.searchParams.append("text", searchText);
+    }
+
+    if(date != null){
+        url.searchParams.append("date", date);
+    }
+
+    if(search != null){
+        url.searchParams.append("text", search);
+    }
+
+    return url;
 }
 
-fillCitiesTable = (id) => {
-    let xhttp = new XMLHttpRequest();
-    xhttp.open('GET', `https://akademija.teltonika.lt/api3/cities/${id}`);
-    xhttp.send();
+changeTitle = (title) => document.getElementById("title").innerText = title;
 
-    xhttp.onreadystatechange = function (){
-        if (this.readyState == 4 && this.status == 200){
-            let cities = getCities(this);
-
-            cities.forEach(city => {
-                appendCity(city);
-            });
-        }
-    };
-}
 
 fillCountryTable = () => {
     let xhttp = new XMLHttpRequest();
-    xhttp.open('GET', `https://akademija.teltonika.lt/api3/countries?page=${currentPage}`);
+    
+    xhttp.open('GET', getFormedURL(true));
     xhttp.send();
 
     xhttp.onreadystatechange = function (){
         if (this.readyState == 4 && this.status == 200){
             let countries = getCountries(this);
+            let dates = [];
 
             countries.forEach(country => {
                 appendCountry(country);
+                dates.push(country.created_at.split(" ")[0]);
             });
+
+            dates = [...new Set(dates)];
+
+            dates.forEach( date => {
+                appendDate(date);
+            })
         }
     };
 }
@@ -41,18 +68,24 @@ fillCountryTable = () => {
 cleanAllCountries = () => {
     let table = document.getElementsByTagName("table")[0];
 
-    table.innerHTML = "<tr>" + 
-                        "<th>pavadinimas</th>" +
-                        "<th>užimamas plotas</th>" +
-                        "<th>gyventojų skaičius</th>" +
-                        "<th>šalies tel. kodas</th>" + 
-                        "<th>veiksmai</th>" +
-                      "</tr>";
+    while (table.childNodes.length > 2) {
+        table.removeChild(table.lastChild);
+    }
 }
 
 refreshTable = () => { 
     cleanAllCountries();
     fillCountryTable();
+    refreshDates();
+}
+
+refreshDates = () => {
+    let filterContent = document.getElementsByClassName("dropdown-content")[0];
+
+    filterContent.innerHTML = "";
+    // while (filterContent.childNodes.length > 2) {
+    //     table.removeChild(table.lastChild);
+    // }
 }
 
 getCountries = (response) => JSON.parse(response.responseText).countires;
@@ -70,11 +103,21 @@ appendCountry = (country) => {
     table.appendChild(newRow);
 }
 
+appendDate = (date) => {
+    let filterContent = document.getElementsByClassName("dropdown-content")[0];
+    let dateAnchor = document.createElement("a");
+    let textNode = document.createTextNode(date);
+    dateAnchor.appendChild(textNode);
+    dateAnchor.href = `?date=${date}`
+
+    filterContent.appendChild(dateAnchor);
+}
+
 getTableActions = (itemType, item) =>{
     let tableData = document.createElement("td");
 
     tableData.appendChild(getDeleteAction(itemType, item));
-    tableData.appendChild(getUpdateAction(itemType, item));
+    tableData.appendChild(getUpdateAction(item));
 
     return tableData;
 }
@@ -88,7 +131,7 @@ getDeleteAction = (itemType, item) => {
     return deleteAction;
 }
 
-getUpdateAction = (itemType, item) => {
+getUpdateAction = (item) => {
     let textNode = document.createTextNode("UPDATE");
     let updateAction = document.createElement("div");
     updateAction.appendChild(textNode);
@@ -101,9 +144,9 @@ getAnchorsToCities = (country) => {
     let tableData = document.createElement("td");
     let textNode = document.createTextNode(country.name);
     let anchorToCities = document.createElement("a");
-
     anchorToCities.appendChild(textNode);
     anchorToCities.href = `cityTable.html?countryId=${country.id}&countryName=${country.name}`
+
     tableData.appendChild(anchorToCities);
 
     return tableData;
@@ -119,7 +162,7 @@ getTableData = (data) => {
 
 deleteItem = (itemType, id) => {
     let xhttp = new XMLHttpRequest();
-    xhttp.open('DELETE', `https://akademija.teltonika.lt/api3/${itemType}/${id}`);
+    xhttp.open('DELETE', `${getFormedURL(false)}/${id}`);
     xhttp.send();
 
     xhttp.onreadystatechange = function (){
@@ -133,7 +176,7 @@ deleteItem = (itemType, id) => {
 sendUpdatedCountryItem = (id) => {
     let country = getFormedCountry();
     let xhttp = new XMLHttpRequest();
-    xhttp.open('PUT', `https://akademija.teltonika.lt/api3/countries/${id}`);
+    xhttp.open('PUT', `${getFormedURL(false)}/${id}`);
     
     sendCountry(xhttp, country);
 }
@@ -180,13 +223,21 @@ appendCity = (city) => {
     table.appendChild(newRow);
 }
 
-fillThePage = () => {
-    if(window.location.search.length > 0){
-        let params = new URLSearchParams(window.location.search);
-        let id = params.get('countryId');
-        let countryName = params.get('countryName');
-    
-        fillCitiesTable(id);
-        changeTitle(countryName);
-    }
+sortAsc = () => {
+    if(order == null || order == "desc")
+        order = "asc";
+    else
+        order = null;
+
+    refreshTable();
+    //countries?page=1&order=asc&text=Lietuva
+} 
+
+sortDesc = () => {
+    if(order == null || order == "asc")
+        order = "desc";
+    else
+        order = null;
+
+    refreshTable();
 }
