@@ -3,9 +3,8 @@
     <head>
         <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
         <link rel="stylesheet" href="table.css">
-        <link rel="stylesheet" href="cityFormingStyle.css">
-        <script src="cityTable.js"></script>
-        <script src="cityForming.js"></script>
+        <link rel="stylesheet" href="countryFormingStyle.css">
+        <script src="common.js"></script>
         <title>Salys</title>
     </head>
     <body>
@@ -16,8 +15,8 @@
                 </div>
             </div>
         </div>
-        <h1 id="title"></h1>
-        <div class="addingSymbol" onclick=openCityForm()>
+        <h1 id="title">Šalys</h1>
+        <div class="addingSymbol" onclick=openAddingForm()>
             <div class="plus">
                 <span class="vertical"></span>
                 <span class="horizontal"></span>
@@ -25,7 +24,7 @@
         </div>
         <input type="search" id="searchBar"></input>
         <div class="filter">
-            <button class="dropbtn">data filter <div class="arrow"></div></button>
+            <button class="dropbtn">data filter<div class="arrow"></div></button>
             <div class="dropdown-content"></div>
         </div>
         <div class="table-box">
@@ -34,7 +33,7 @@
                     <th>pavadinimas <span onclick="sortAsc()">SortAsc</span> | <span onclick="sortDesc()">SortDesc</span></th>
                     <th>užimamas plotas</th>
                     <th>gyventojų skaičius</th>
-                    <th>pašto kodas</th>
+                    <th class="changeable">šalies tel. kodas</th>
                     <th>veiksmai</th>
                 </tr>
             </table>
@@ -48,21 +47,21 @@
             <li onclick=changePage(5)>5</li>
             <li onclick=nextPage()>></li>
         </ul>
-        <div class="cityAddingBox">
+        <div class="addingForm">
             <label for="name">Pavadinimas</label><br>
             <input type="text" id="name" name="fname" value="salis"><br>
             <label for="area">Užimamas plotas</label><br>
             <input type="text" id="area" name="lname" value="111"><br><br>
             <label for="population">Gyventojų skaičius</label><br>
             <input type="text" id="population" name="lname" value="222"><br><br>
-            <label for="postcode">Pašto kodas</label><br>
-            <input type="text" id="postcode" name="lname" value="333"><br><br>
-            <button onClick=addNewCity() id="sendingTrigger">SAUGOTI</button>         
+            <label class="changeable" for="calling_code">Šalies Tel. kodas</label><br>
+            <input class="changeable" type="text" id="calling_code" name="lname" value="333"><br><br>
+            <button onClick=addNewItem() id="sendingTrigger">SAUGOTI</button>         
         </div>
         <div id="overlay" onclick=exitForm()></div>
         <div class="messageBox">
             <h3>Message:</h3>
         </div>
     </body>
-    <script src="execute.js"></script>
+    <script src="executeAfterLoading.js"></script>
 </html>
