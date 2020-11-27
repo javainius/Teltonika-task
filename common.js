@@ -82,6 +82,8 @@ getTableActions = (item) =>{
 getUpdateAction = (item) => {
     let textNode = document.createTextNode("UPDATE");
     let updateAction = document.createElement("div");
+
+    updateAction.className = "update"
     updateAction.appendChild(textNode);
     updateAction.onclick = () => setForm(item);
 
@@ -231,6 +233,8 @@ appendItem = (item) => {
 getDeleteAction = (item) => {
     let textNode = document.createTextNode("DELETE");
     let deleteAction = document.createElement("div");
+    
+    deleteAction.className = "delete"
     deleteAction.appendChild(textNode);
     deleteAction.onclick = () => deleteItem(item.id);
 

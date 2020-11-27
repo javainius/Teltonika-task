@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
         <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet'>
-        <link rel="stylesheet" href="table.css">
+        <link rel="stylesheet" href="view.css">
         <link rel="stylesheet" href="countryFormingStyle.css">
         <script src="common.js"></script>
         <title>Salys</title>
@@ -15,22 +17,24 @@
                 </div>
             </div>
         </div>
-        <h1 id="title">Šalys</h1>
-        <div class="addingSymbol" onclick=openAddingForm()>
-            <div class="plus">
-                <span class="vertical"></span>
-                <span class="horizontal"></span>
+        <div class="titleContainer">
+            <h1 id="title">Šalys</h1>
+            <div class="addingSymbol" onclick=openAddingForm()>
+                <div class="plus">
+                    <span class="vertical"></span>
+                    <span class="horizontal"></span>
+                </div>
             </div>
         </div>
         <input type="search" id="searchBar"></input>
         <div class="filter">
-            <button class="dropbtn">data filter<div class="arrow"></div></button>
+            <button class="dropbtn">data filter<i class="arrow"></i></button>
             <div class="dropdown-content"></div>
         </div>
         <div class="table-box">
             <table>
                 <tr>
-                    <th>pavadinimas <span onclick="sortAsc()">SortAsc</span> | <span onclick="sortDesc()">SortDesc</span></th>
+                    <th>pavadinimas <i class="descArrow" onclick="sortAsc()"></i><i class="ascArrow" onclick="sortDesc()"></th>
                     <th>užimamas plotas</th>
                     <th>gyventojų skaičius</th>
                     <th class="changeable">šalies tel. kodas</th>
@@ -49,14 +53,14 @@
         </ul>
         <div class="addingForm">
             <label for="name">Pavadinimas</label><br>
-            <input type="text" id="name" name="fname" value="salis"><br>
+            <input type="text" id="name" name="fname" value=""><br>
             <label for="area">Užimamas plotas</label><br>
-            <input type="text" id="area" name="lname" value="111"><br><br>
+            <input type="text" id="area" name="lname" value=""><br><br>
             <label for="population">Gyventojų skaičius</label><br>
-            <input type="text" id="population" name="lname" value="222"><br><br>
+            <input type="text" id="population" name="lname" value=""><br><br>
             <label class="changeable" for="calling_code">Šalies Tel. kodas</label><br>
-            <input class="changeable" type="text" id="calling_code" name="lname" value="333"><br><br>
-            <button onClick=addNewItem() id="sendingTrigger">SAUGOTI</button>         
+            <input class="changeable" type="text" id="calling_code" name="lname" value=""><br><br>
+            <button onClick=addNewItem() id="sendingTrigger">saugoti</button>         
         </div>
         <div id="overlay" onclick=exitForm()></div>
         <div class="messageBox">
